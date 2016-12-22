@@ -28,9 +28,9 @@
 </style>
 
 <body>
-    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span class="c-gray en">&gt;</span> 图片列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span class="c-gray en">&gt;</span> 图片列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:window.location.reload();" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
     <div class="page-container">
-        <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="picture_add('添加图片','picture-add.html')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong id="datacount">0</strong> 条</span> </div>
+        <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="delall()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="picture_add('添加图片','picture-add.html')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong id="datacount">0</strong> 条</span> </div>
         <div class="mt-20">
             <table class="table table-border table-bordered table-bg table-hover table-sort">
                 <thead>
@@ -86,7 +86,7 @@
 	                        newDate.setTime(arr[i].created);
 	                        str += '<tr class="text-c">' +
 	                            '<td>' +
-	                            '<input name="" type="checkbox" value="' + arr[i]._id + '">' +
+	                            '<input name="" type="checkbox" class="ckbitem" value="' + arr[i]._id + '">' +
 	                            '</td>' +
 	                            '<td>' +
 	                            '<a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="' + arr[i].name + '"><img src="' + arr[i].url + '?response-content-type=image/jpg&x-oss-process=image/resize,m_fixed,h_80,w_80"></a>' +
@@ -97,7 +97,7 @@
 	                            '<td>' + newDate.format("yyyy-MM-dd h:m:s") + '</td>' +
 	                            '<td class="td-manage">' +
 	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit()" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
-	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del()" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
+	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del(this, \''+arr[i]._id+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
 	                            '</td>' +
 	                            '</tr>';
 	                    }
@@ -139,9 +139,9 @@
 					                            '<td>' + newDate.format("yyyy-MM-dd h:m:s") + '</td>' +
 					                            '<td class="td-manage">' +
 					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit()" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
-					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del()" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
-					                            '</td>' +
-					                            '</tr>';
+					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del(this, \''+arr[i]._id+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
+	                            				'</td>' +
+	                            				'</tr>';
 					                    }
 
 					                    $("#dataContainer").append(str)
@@ -157,6 +157,38 @@
 	            }
 	        })
         })(1, 10)
+
+        function delall() {
+        	var itemArr = []
+        	$("input.ckbitem").each(function(i, d) {
+        		if(d.value && d.checked == true) {
+        			itemArr.push(d.value);
+        		}
+        	})
+
+        	if(itemArr.length == 0) {
+        		alert("请选择要删除的数据");
+        		return;
+        	}
+
+        	$.ajax({
+	            type: "POST",
+	            url: "http://"+config.api.host+":"+config.api.port+"/api/source/del",
+	            data: {
+	                idarr: itemArr
+	            },
+	            dataType: "json",
+	            async: true,
+	            success: function(result) {
+	                if (result.errcode == 0) {
+	                	alert("删除成功");
+	                	window.location.reload();
+	                } else {
+	                    alert(result.errmsg);
+	                }
+	            }
+	        })
+        }
 
 	    Date.prototype.format = function(format) {
 	        var date = {
@@ -242,11 +274,26 @@
     /*图片-删除*/
     function picture_del(obj, id) {
         layer.confirm('确认要删除吗？', function(index) {
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {
-                icon: 1,
-                time: 1000
-            });
+        	$.ajax({
+	            type: "POST",
+	            url: "http://"+config.api.host+":"+config.api.port+"/api/source/del",
+	            data: {
+	                idarr: [id]
+	            },
+	            dataType: "json",
+	            async: true,
+	            success: function(result) {
+	                if (result.errcode == 0) {
+	                	$(obj).parents("tr").remove();
+			            layer.msg('已删除!', {
+			                icon: 1,
+			                time: 1000
+			            });
+	                } else {
+	                    alert(result.errmsg);
+	                }
+	            }
+	        })
         });
     }
     </script>
