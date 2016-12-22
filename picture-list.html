@@ -1,166 +1,255 @@
 ﻿<!DOCTYPE HTML>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="renderer" content="webkit|ie-comp|ie-stand">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
-<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
-<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.7/iconfont.css" />
-<link rel="stylesheet" type="text/css" href="lib/icheck/icheck.css" />
-<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
-<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
-<link href="lib/lightbox2/2.8.1/css/lightbox.css" rel="stylesheet" type="text/css" >
-<title>图片列表</title>
-</head>
-<body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span class="c-gray en">&gt;</span> 图片列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
-<div class="page-container">
-<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="picture_add('添加图片','picture-add.html')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong>7</strong> 条</span> </div>
-	<div class="mt-20">
-		<table class="table table-border table-bordered table-bg table-hover table-sort">
-			<thead>
-				<tr class="text-c">
-					<th width="40"><input name="" type="checkbox" value=""></th>
-					<th width="170">封面</th>
-					<th width="130">图片名称</th>
-					<th width="100">所属栏目</th>
-					<th>图片描述</th>
-					<th width="150">更新时间</th>
-					<th width="100">操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
-					<td><a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="厨房" onclick="picture_show('','','10001','360','400')"><img src="temp/Thumb/chufang.jpg"></a></td>
-					<td class="text-c">图片名称1</td>
-					<td>栏目1</td>
-					<td>图片描述1</td>
-					<td>2016-12-11</td>
-					<td class="td-manage"> <a style="text-decoration:none" class="ml-5" onClick="picture_edit('图库编辑','picture-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				</tr>
-				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
-					<td><a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="客厅"><img src="temp/Thumb/keting4.jpg"></a></td>
-					<td class="text-c">图片名称2</td>
-					<td>栏目2</td>
-					<td>图片描述2</td>
-					<td>2016-12-11</td>
-					<td class="td-manage"> <a style="text-decoration:none" class="ml-5" onClick="picture_edit('图库编辑','picture-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				</tr>
-				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
-					<td><a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="客厅"><img src="temp/Thumb/keting4.jpg"></a></td>
-					<td class="text-c">图片名称3</td>
-					<td>栏目1</td>
-					<td>图片描述3</td>
-					<td>2016-12-11</td>
-					<td class="td-manage"> <a style="text-decoration:none" class="ml-5" onClick="picture_edit('图库编辑','picture-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				</tr>
-				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
-					<td><a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="客厅"><img src="temp/Thumb/keting4.jpg"></a></td>
-					<td class="text-c">图片名称4</td>
-					<td>栏目2</td>
-					<td>图片描述4</td>
-					<td>2016-12-11</td>
-					<td class="td-manage"> <a style="text-decoration:none" class="ml-5" onClick="picture_edit('图库编辑','picture-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				</tr>
-				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
-					<td><a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="客厅"><img src="temp/Thumb/keting4.jpg"></a></td>
-					<td class="text-c">图片名称5</td>
-					<td>栏目1</td>
-					<td>图片描述5</td>
-					<td>2016-12-11</td>
-					<td class="td-manage"> <a style="text-decoration:none" class="ml-5" onClick="picture_edit('图库编辑','picture-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				</tr>
-				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
-					<td><a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="客厅"><img src="temp/Thumb/keting4.jpg"></a></td>
-					<td class="text-c">图片名称6</td>
-					<td>栏目2</td>
-					<td>图片描述6</td>
-					<td>2016-12-11</td>
-					<td class="td-manage"> <a style="text-decoration:none" class="ml-5" onClick="picture_edit('图库编辑','picture-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				</tr>
-				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
-					<td><a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="客厅"><img src="temp/Thumb/keting4.jpg"></a></td>
-					<td class="text-c">图片名称7</td>
-					<td>栏目1</td>
-					<td>图片描述7</td>
-					<td>2016-12-11</td>
-					<td class="td-manage"> <a style="text-decoration:none" class="ml-5" onClick="picture_edit('图库编辑','picture-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
-<script type="text/javascript" src="lib/layer/2.1/layer.js"></script> 
-<script type="text/javascript" src="lib/lightbox2/2.8.1/js/lightbox-plus-jquery.min.js"></script> 
-<script type="text/javascript" src="static/h-ui/js/H-ui.js"></script> 
-<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> 
-<script type="text/javascript">
-$(function(){
-	$.Huihover(".portfolio-area li");
-});
-$('.table-sort').dataTable({
-	"aaSorting": [[ 1, "desc" ]],//默认第几个排序
-	"bStateSave": true,//状态保存
-	"aoColumnDefs": [
-	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-	  {"orderable":false,"aTargets":[0]}// 制定列不参与排序
-	]
-});
-/*图片-添加*/
-function picture_add(title,url){
-	var index = layer.open({
-		type: 2,
-		title: title,
-		content: url
-	});
-	layer.full(index);
-}
-/*图片-下架*/
-function picture_stop(obj,id){
-	layer.confirm('确认要下架吗？',function(index){
-		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
-		$(obj).remove();
-		layer.msg('已下架!',{icon: 5,time:1000});
-	});
-}
 
-/*图片-发布*/
-function picture_start(obj,id){
-	layer.confirm('确认要发布吗？',function(index){
-		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
-		$(obj).remove();
-		layer.msg('已发布!',{icon: 6,time:1000});
-	});
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.7/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="lib/icheck/icheck.css" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+    <link href="lib/lightbox2/2.8.1/css/lightbox.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="static/paging/paging.css" />
+    <title>图片列表</title>
+</head>
+<style type="text/css">
+.table .text-editor {
+    overflow: hidden;
+    width: 200px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
-/*图片-编辑*/
-function picture_edit(title,url,id){
-	var index = layer.open({
-		type: 2,
-		title: title,
-		content: url
-	});
-	layer.full(index);
-}
-/*图片-删除*/
-function picture_del(obj,id){
-	layer.confirm('确认要删除吗？',function(index){
-		$(obj).parents("tr").remove();
-		layer.msg('已删除!',{icon:1,time:1000});
-	});
-}
-</script>
+</style>
+
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span class="c-gray en">&gt;</span> 图片列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="picture_add('添加图片','picture-add.html')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong id="datacount">0</strong> 条</span> </div>
+        <div class="mt-20">
+            <table class="table table-border table-bordered table-bg table-hover table-sort">
+                <thead>
+                    <tr class="text-c">
+                        <th width="40">
+                            <input name="" type="checkbox" value="">
+                        </th>
+                        <th width="170">封面</th>
+                        <th width="130">图片名称</th>
+                        <th width="100">所属栏目</th>
+                        <th>图片描述</th>
+                        <th width="150">更新时间</th>
+                        <th width="100">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="dataContainer">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="pageTool"></div>
+	<div id="pageToolbar"></div>
+    <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/layer/2.1/layer.js"></script>
+    <script type="text/javascript" src="lib/lightbox2/2.8.1/js/lightbox-plus-jquery.min.js"></script>
+    <script type="text/javascript" src="static/h-ui/js/H-ui.js"></script>
+    <script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="static/paging/query.js"></script>
+    <script type="text/javascript" src="static/paging/paging.js"></script>
+    <script type="text/javascript" src="static/js/config.js"></script>
+    <script type="text/javascript">
+    	(function(start, limit) {
+    		var currPage = start
+    		var pageSize = limit
+        	$.ajax({
+	            type: "GET",
+	            url: "http://"+config.api.host+":"+config.api.port+"/api/source/list",
+	            data: {
+	                type: 1,
+	                start: currPage,
+	                limit: pageSize
+	            },
+	            dataType: "json",
+	            async: true,
+	            success: function(result) {
+	                if (result.errcode == 0) {
+	                    $("#datacount").html(result.total);
+	                    var str = "";
+	                    var arr = result.data;
+	                    var len = result.data.length;
+	                    var newDate = new Date();
+	                    for (var i = 0; i < len; i++) {
+	                        newDate.setTime(arr[i].created);
+	                        str += '<tr class="text-c">' +
+	                            '<td>' +
+	                            '<input name="" type="checkbox" value="' + arr[i]._id + '">' +
+	                            '</td>' +
+	                            '<td>' +
+	                            '<a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="' + arr[i].name + '"><img src="' + arr[i].url + '?response-content-type=image/jpg&x-oss-process=image/resize,m_fixed,h_80,w_80"></a>' +
+	                            '</td>' +
+	                            '<td class="text-c">' + arr[i].name + '</td>' +
+	                            '<td>' + (arr[i].column == 1 ? "栏目1" : arr[i].column == 2 ? "栏目2" : "其他栏目") + '</td>' +
+	                            '<td>' + arr[i].description + '</td>' +
+	                            '<td>' + newDate.format("yyyy-MM-dd h:m:s") + '</td>' +
+	                            '<td class="td-manage">' +
+	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit()" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
+	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del()" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
+	                            '</td>' +
+	                            '</tr>';
+	                    }
+
+	                    $("#dataContainer").append(str)
+
+	                    $('#pageTool').Paging({pagesize:pageSize, count:result.total, callback:function(page, size, count) {
+	                    	currPage = page
+							$.ajax({
+					            type: "GET",
+					            url: "http://"+config.api.host+":"+config.api.port+"/api/source/list",
+					            data: {
+					                type: 1,
+					                start: currPage,
+					                limit: pageSize
+					            },
+					            dataType: "json",
+					            async: true,
+					            success: function(result) {
+					                if (result.errcode == 0) {
+					                	$("#dataContainer").html("");
+					                    $("#datacount").html(result.total);
+					                    var str = "";
+					                    var arr = result.data;
+					                    var len = result.data.length;
+					                    var newDate = new Date();
+					                    for (var i = 0; i < len; i++) {
+					                        newDate.setTime(arr[i].created);
+					                        str += '<tr class="text-c">' +
+					                            '<td>' +
+					                            '<input name="" type="checkbox" value="' + arr[i]._id + '">' +
+					                            '</td>' +
+					                            '<td>' +
+					                            '<a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="' + arr[i].name + '"><img src="' + arr[i].url + '?response-content-type=image/jpg&x-oss-process=image/resize,m_fixed,h_80,w_80"></a>' +
+					                            '</td>' +
+					                            '<td class="text-c">' + arr[i].name + '</td>' +
+					                            '<td>' + (arr[i].column == 1 ? "栏目1" : arr[i].column == 2 ? "栏目2" : "其他栏目") + '</td>' +
+					                            '<td>' + arr[i].description + '</td>' +
+					                            '<td>' + newDate.format("yyyy-MM-dd h:m:s") + '</td>' +
+					                            '<td class="td-manage">' +
+					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit()" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
+					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del()" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
+					                            '</td>' +
+					                            '</tr>';
+					                    }
+
+					                    $("#dataContainer").append(str)
+					                } else {
+					                    alert(result.errmsg);
+					                }
+					            }
+					        })
+						}});
+	                } else {
+	                    alert(result.errmsg);
+	                }
+	            }
+	        })
+        })(1, 10)
+
+	    Date.prototype.format = function(format) {
+	        var date = {
+	            "M+": this.getMonth() + 1,
+	            "d+": this.getDate(),
+	            "h+": this.getHours(),
+	            "m+": this.getMinutes(),
+	            "s+": this.getSeconds(),
+	            "q+": Math.floor((this.getMonth() + 3) / 3),
+	            "S+": this.getMilliseconds()
+	        };
+	        if (/(y+)/i.test(format)) {
+	            format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+	        }
+	        for (var k in date) {
+	            if (new RegExp("(" + k + ")").test(format)) {
+	                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+	            }
+	        }
+	        return format;
+	    }
+
+	    $(function() {
+	        $.Huihover(".portfolio-area li");
+	    });
+
+    $('.table-sort').dataTable({
+        "aaSorting": [
+            [1, "desc"]
+        ], //默认第几个排序
+        "bStateSave": true, //状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {
+                "orderable": false,
+                "aTargets": [0]
+            } // 制定列不参与排序
+        ]
+    });
+    /*图片-添加*/
+    function picture_add(title, url) {
+        var index = layer.open({
+            type: 2,
+            title: title,
+            content: url
+        });
+        layer.full(index);
+    }
+    /*图片-下架*/
+    function picture_stop(obj, id) {
+        layer.confirm('确认要下架吗？', function(index) {
+            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
+            $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
+            $(obj).remove();
+            layer.msg('已下架!', {
+                icon: 5,
+                time: 1000
+            });
+        });
+    }
+
+    /*图片-发布*/
+    function picture_start(obj, id) {
+        layer.confirm('确认要发布吗？', function(index) {
+            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
+            $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
+            $(obj).remove();
+            layer.msg('已发布!', {
+                icon: 6,
+                time: 1000
+            });
+        });
+    }
+    /*图片-编辑*/
+    function picture_edit(title, url, id) {
+        var index = layer.open({
+            type: 2,
+            title: title,
+            content: url
+        });
+        layer.full(index);
+    }
+    /*图片-删除*/
+    function picture_del(obj, id) {
+        layer.confirm('确认要删除吗？', function(index) {
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!', {
+                icon: 1,
+                time: 1000
+            });
+        });
+    }
+    </script>
 </body>
+
 </html>

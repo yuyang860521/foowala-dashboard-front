@@ -20,6 +20,9 @@
     <title>新增图片</title>
     <link href="lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
 </head>
+<style type="text/css">
+	.thumbImg{width: 50%;}
+</style>
 <body>
     <div class="page-container">
         <form class="form form-horizontal" id="form-article-add">
@@ -48,7 +51,13 @@
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">图片上传：</label>
+                <label class="form-label col-xs-4 col-sm-2">缩略图：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                   	<img src="temp/big/chufang.jpg" class="thumbImg"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">更改图片：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <div class="uploader-list-container">
                         <div class="queueList">
@@ -123,7 +132,7 @@
 
         $.ajax({
              type: "POST",
-             url: "http://"+config.api.host+":"+config.api.port+"/api/source/save",
+             url: "http://10.111.107.25:3002/api/source/save",
              data: data,
              dataType: "json",
              async: true,
@@ -296,7 +305,8 @@
                 swf: 'lib/webuploader/0.1.5/Uploader.swf',
                 chunked: false,
                 chunkSize: 512 * 1024,
-                server: "http://"+config.api.host+":"+config.api.port+"/api/source/upload?source=image",
+                server: 'http://10.111.107.25:3002/api/source/upload?source=image',
+
                 // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
                 disableGlobalDnd: true,
                 fileNumLimit: 300,
@@ -616,7 +626,7 @@
                     case 'finish':
                         stats = uploader.getStats();
                         if (stats.successNum) {
-                            alert('上传成功');
+                            layer.msg('上传成功',{icon:1,time:1000});
                         } else {
                             // 没有成功的图片，重设
                             state = 'done';
