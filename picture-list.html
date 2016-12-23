@@ -83,20 +83,20 @@
 	                    var len = result.data.length;
 	                    var newDate = new Date();
 	                    for (var i = 0; i < len; i++) {
-	                        newDate.setTime(arr[i].created);
+	                        newDate.setTime(arr[i].modified);
 	                        str += '<tr class="text-c">' +
 	                            '<td>' +
 	                            '<input name="" type="checkbox" class="ckbitem" value="' + arr[i]._id + '">' +
 	                            '</td>' +
 	                            '<td>' +
-	                            '<a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="' + arr[i].name + '"><img src="' + arr[i].url + '?response-content-type=image/jpg&x-oss-process=image/resize,m_fixed,h_80,w_80"></a>' +
+	                            '<a href="'+arr[i].url+'" data-lightbox="gallery" data-title="' + arr[i].name + '"><img src="' + arr[i].url + '?response-content-type=image/jpg&x-oss-process=image/resize,m_fixed,h_80,w_80"></a>' +
 	                            '</td>' +
 	                            '<td class="text-c">' + arr[i].name + '</td>' +
 	                            '<td>' + (arr[i].column == 1 ? "栏目1" : arr[i].column == 2 ? "栏目2" : "其他栏目") + '</td>' +
 	                            '<td>' + arr[i].description + '</td>' +
 	                            '<td>' + newDate.format("yyyy-MM-dd h:m:s") + '</td>' +
 	                            '<td class="td-manage">' +
-	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit()" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
+	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit(\''+arr[i]._id+'\')" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
 	                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del(this, \''+arr[i]._id+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
 	                            '</td>' +
 	                            '</tr>';
@@ -125,20 +125,20 @@
 					                    var len = result.data.length;
 					                    var newDate = new Date();
 					                    for (var i = 0; i < len; i++) {
-					                        newDate.setTime(arr[i].created);
+					                        newDate.setTime(arr[i].modified);
 					                        str += '<tr class="text-c">' +
 					                            '<td>' +
 					                            '<input name="" type="checkbox" value="' + arr[i]._id + '">' +
 					                            '</td>' +
 					                            '<td>' +
-					                            '<a href="temp/big/chufang.jpg" data-lightbox="gallery" data-title="' + arr[i].name + '"><img src="' + arr[i].url + '?response-content-type=image/jpg&x-oss-process=image/resize,m_fixed,h_80,w_80"></a>' +
+					                            '<a href="'+arr[i].url+'" data-lightbox="gallery" data-title="' + arr[i].name + '"><img src="' + arr[i].url + '?response-content-type=image/jpg&x-oss-process=image/resize,m_fixed,h_80,w_80"></a>' +
 					                            '</td>' +
 					                            '<td class="text-c">' + arr[i].name + '</td>' +
 					                            '<td>' + (arr[i].column == 1 ? "栏目1" : arr[i].column == 2 ? "栏目2" : "其他栏目") + '</td>' +
 					                            '<td>' + arr[i].description + '</td>' +
 					                            '<td>' + newDate.format("yyyy-MM-dd h:m:s") + '</td>' +
 					                            '<td class="td-manage">' +
-					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit()" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
+					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_edit(\''+arr[i]._id+'\')"" href="javascript:;" title="编辑"><i 	class="Hui-iconfont">&#xe6df;</i></a>' +
 					                            '<a style="text-decoration:none" class="ml-5" onClick="picture_del(this, \''+arr[i]._id+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>' +
 	                            				'</td>' +
 	                            				'</tr>';
@@ -159,35 +159,42 @@
         })(1, 10)
 
         function delall() {
-        	var itemArr = []
-        	$("input.ckbitem").each(function(i, d) {
-        		if(d.value && d.checked == true) {
-        			itemArr.push(d.value);
-        		}
-        	})
+        	layer.confirm('确认要删除吗？', function(index) {
+        		var itemArr = []
+	        	$("input.ckbitem").each(function(i, d) {
+	        		if(d.value && d.checked == true) {
+	        			itemArr.push(d.value);
+	        		}
+	        	})
 
-        	if(itemArr.length == 0) {
-        		alert("请选择要删除的数据");
-        		return;
-        	}
+	        	if(itemArr.length == 0) {
+	        		alert("请选择要删除的数据");
+	        		return;
+	        	}
 
-        	$.ajax({
-	            type: "POST",
-	            url: "http://"+config.api.host+":"+config.api.port+"/api/source/del",
-	            data: {
-	                idarr: itemArr
-	            },
-	            dataType: "json",
-	            async: true,
-	            success: function(result) {
-	                if (result.errcode == 0) {
-	                	alert("删除成功");
-	                	window.location.reload();
-	                } else {
-	                    alert(result.errmsg);
-	                }
-	            }
-	        })
+	        	$.ajax({
+		            type: "POST",
+		            url: "http://"+config.api.host+":"+config.api.port+"/api/source/del",
+		            data: {
+		                idarr: itemArr
+		            },
+		            dataType: "json",
+		            async: true,
+		            success: function(result) {
+		                if (result.errcode == 0) {
+		                	setTimeout(function() {
+				            	window.location.reload();
+				            },1000);
+				            layer.msg('已删除!', {
+				                icon: 1,
+				                time: 1000
+				            });
+		                } else {
+		                    alert(result.errmsg);
+		                }
+		            }
+		        })
+        	});
         }
 
 	    Date.prototype.format = function(format) {
@@ -237,37 +244,12 @@
         });
         layer.full(index);
     }
-    /*图片-下架*/
-    function picture_stop(obj, id) {
-        layer.confirm('确认要下架吗？', function(index) {
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
-            $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
-            $(obj).remove();
-            layer.msg('已下架!', {
-                icon: 5,
-                time: 1000
-            });
-        });
-    }
-
-    /*图片-发布*/
-    function picture_start(obj, id) {
-        layer.confirm('确认要发布吗？', function(index) {
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
-            $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
-            $(obj).remove();
-            layer.msg('已发布!', {
-                icon: 6,
-                time: 1000
-            });
-        });
-    }
     /*图片-编辑*/
-    function picture_edit(title, url, id) {
+    function picture_edit(id) {
         var index = layer.open({
             type: 2,
-            title: title,
-            content: url
+            title: "图片编辑",
+            content: "picture-change.html?id="+id
         });
         layer.full(index);
     }
@@ -284,6 +266,9 @@
 	            async: true,
 	            success: function(result) {
 	                if (result.errcode == 0) {
+	                	setTimeout(function() {
+			            	window.location.reload();
+			            },1000);
 	                	$(obj).parents("tr").remove();
 			            layer.msg('已删除!', {
 			                icon: 1,
