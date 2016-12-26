@@ -10,7 +10,7 @@
     <LINK rel="Bookmark" href="/favicon.ico">
     <LINK rel="Shortcut Icon" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="static/css/font-awesome.css" />
-	<link rel="stylesheet" type="text/css" href="static/css/simditor.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/simditor.css" />
     <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
     <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.7/iconfont.css" />
@@ -20,6 +20,7 @@
     <title>新增图片</title>
     <link href="lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
     <div class="page-container">
         <form class="form form-horizontal" id="form-article-add">
@@ -80,8 +81,8 @@
     <!--_footer 作为公共模版分离出去-->
     <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="static/js/module.js"></script>
-	<script type="text/javascript" src="static/js/uploader.js"></script>
-	<script type="text/javascript" src="static/js/simditor.js"></script>
+    <script type="text/javascript" src="static/js/uploader.js"></script>
+    <script type="text/javascript" src="static/js/simditor.js"></script>
     <script type="text/javascript" src="lib/layer/2.1/layer.js"></script>
     <script type="text/javascript" src="lib/icheck/jquery.icheck.min.js"></script>
     <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"></script>
@@ -96,11 +97,11 @@
     <script type="text/javascript" src="lib/webuploader/0.1.5/webuploader.min.js"></script>
     <script type="text/javascript">
     //文本编辑
-	var editor = new Simditor({
+    var editor = new Simditor({
         textarea: $('.editor'),
-      	toolbarFloat: false
-	});
-    
+        toolbarFloat: false
+    });
+
     function article_save() {
         var data = {
             pathstr: $("#path").val(),
@@ -110,36 +111,36 @@
             type: 1
         }
         if (!data.name) {
-            alert("请填写图片名称（即标题）");
+            layer.msg("请填写图片名称（即标题）");
             return;
         }
         if (!data.column) {
-            alert("请选择图片分类栏目");
+            layer.msg("请选择图片分类栏目");
             return;
         }
         if (!data.pathstr) {
-            alert("请上传图片");
+            layer.msg("请上传图片");
             return;
         }
 
         $.ajax({
-             type: "POST",
-             url: "http://"+config.api.host+":"+config.api.port+"/api/source/save",
-             data: data,
-             dataType: "json",
-             async: true,
-             success: function(result) {
-                if(result.errcode == 0) {
+            type: "POST",
+            url: "http://" + config.api.host + ":" + config.api.port + "/api/source/save",
+            data: data,
+            dataType: "json",
+            async: true,
+            success: function(result) {
+                if (result.errcode == 0) {
                     window.parent.location.reload();
                 } else {
                     alert(result.errmsg);
                 }
-             }
-         })
+            }
+        })
     }
 
     function layer_close() {
-        self.location.href = "picture-list.html";
+        window.parent.location.reload();
     }
 
 
@@ -184,8 +185,8 @@
                 // 存放上传路径的数组
                 pathList = [],
 
-            // 所有文件的进度信息，key为file id
-            percentages = {},
+                // 所有文件的进度信息，key为file id
+                percentages = {},
                 // 判断浏览器是否支持图片的base64
                 isSupportBase64 = (function() {
                     var data = new Image();
@@ -239,15 +240,15 @@
                         window['expressinstallcallback'] = function(state) {
                             switch (state) {
                                 case 'Download.Cancelled':
-                                    alert('您取消了更新！')
+                                    layer.msg('您取消了更新！')
                                     break;
 
                                 case 'Download.Failed':
-                                    alert('安装失败')
+                                    layer.msg('安装失败')
                                     break;
 
                                 default:
-                                    alert('安装已成功，请刷新！');
+                                    layer.msg('安装已成功，请刷新！');
                                     break;
                             }
                             delete window['expressinstallcallback'];
@@ -279,7 +280,7 @@
 
                 return;
             } else if (!WebUploader.Uploader.support()) {
-                alert('Web Uploader 不支持您的浏览器！');
+                layer.msg('Web Uploader 不支持您的浏览器！');
                 return;
             }
 
@@ -297,7 +298,7 @@
                 swf: 'lib/webuploader/0.1.5/Uploader.swf',
                 chunked: false,
                 chunkSize: 512 * 1024,
-                server: "http://"+config.api.host+":"+config.api.port+"/api/source/upload?source=image",
+                server: "http://" + config.api.host + ":" + config.api.port + "/api/source/upload?source=image",
                 // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
                 disableGlobalDnd: true,
                 fileNumLimit: 300,
@@ -617,7 +618,7 @@
                     case 'finish':
                         stats = uploader.getStats();
                         if (stats.successNum) {
-                            alert('上传成功');
+                            layer.msg('上传成功！');
                         } else {
                             // 没有成功的图片，重设
                             state = 'done';

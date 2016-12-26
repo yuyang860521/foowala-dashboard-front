@@ -45,12 +45,12 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">视频展示：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <img id="imgsource" src="" class="thumbImg" />
+                    <video id="videosource" src="" controls="controls" height="170px">您的浏览器不支持播放该视频。</video>
                 </div>
             </div>
             <div class="row cl">
                 <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-                    <button onClick="article_save();" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+                    <button onClick="video_save();" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
                     <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
                 </div>
             </div>
@@ -81,18 +81,14 @@
         toolbarFloat: false
     });
 
-    function article_save() {
+    function video_save() {
         var data = {
             id: $("#idcache").val(),
             name: $("#name").val(),
             desc: delHtmlTag(editor.getValue())
         }
         if (!data.name) {
-            alert("请填写视频名称（即标题）");
-            return;
-        }
-        if (!data.column) {
-            alert("请选择视频分类栏目");
+            layer.msg("请填写视频名称（即标题）");
             return;
         }
 
@@ -104,7 +100,7 @@
             async: true,
             success: function(result) {
                 if (result.errcode == 0) {
-                    layer.msg('图片基本信息修改成功!', {
+                    layer.msg('视频基本信息修改成功!', {
                         icon: 1,
                         time: 1000
                     });
@@ -116,7 +112,7 @@
     }
 
     function layer_close() {
-        self.location.href = "picture-list.html";
+        window.parent.location.reload();
     }
 
     function getQueryString(name) {
@@ -147,7 +143,7 @@
                     var data = result.data;
                     $("#name").val(data.name);
                     editor.setValue(data.description);
-                    $("#imgsource").attr("src", data.url);
+                    $("#videosource").attr("src", data.url);
                 } else {
                     alert(result.errmsg);
                 }

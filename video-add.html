@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html>
-
+<style type="text/css">
+	button.radius{background-color:#e6e6e6;}
+</style>
 <head>
     <meta charset="utf-8">
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
@@ -33,25 +35,22 @@
 
 <body>
     <div class="page-container">
-        <form class="form form-horizontal" id="form-article-add">
+        <form class="form form-horizontal" id="videoForm">
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">视频名称：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="name" name="">
+                    <input type="text" class="input-text" placeholder="视频名称" id="name" name="name">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">视频描述：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea class="editor" placeholder="" id="desc"></textarea>
+                    <textarea class="editor" placeholder="" id="desc" name="desc"></textarea>
                 </div>
             </div>
         </form>
-        <iframe src="" name="hidiframe" style="display:none;"></iframe>
-        <form id="fileupload" action="" method="POST" enctype="multipart/form-data" target="hidiframe" onsubmit="return doSubmit(this)">
-            <noscript>
-                <input type="hidden" name="redirect" value="">
-            </noscript>
+        <form id="fileupload" name="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data" data-ng-app="demo" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+            <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
             <div class="row fileupload-buttonbar">
                 <div style="margin:20px 150px">
                     <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
@@ -59,15 +58,11 @@
                     <span>添加视频</span>
                     <input type="file" name="files[]" multiple ng-disabled="disabled">
                     </span>
-                    <button type="button" class="btn btn-primary start" data-ng-click="submit()">
-                        <i class="Hui-iconfont">&#xe642;</i>
-                        <span>上传</span>
-                    </button>
                     <button type="button" class="btn btn-primary start" onclick="video_save()">
                         <i class="Hui-iconfont">&#xe642;</i>
                         <span>保存</span>
                     </button>
-                    <button type="button" class="btn btn-warning cancel" data-ng-click="cancel()">
+                    <button type="button" class="btn btn-default radius" onClick="layer_close();">
                         <i class="Hui-iconfont">&#xe6dd;</i>
                         <span>取消</span>
                     </button>
@@ -80,6 +75,42 @@
                     <div class="progress-extended">&nbsp;</div>
                 </div>
             </div>
+            <table class="table table-striped files ng-cloak">
+                <tr data-ng-repeat="file in queue" data-ng-class="{'processing': file.$processing()}">
+                    <td data-ng-switch data-on="!!file.thumbnailUrl">
+                        <div class="preview" data-ng-switch-when="true">
+                            <a data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery><img data-ng-src="{{file.thumbnailUrl}}" alt=""></a>
+                        </div>
+                        <div class="preview" data-ng-switch-default data-file-upload-preview="file"></div>
+                    </td>
+                    <td>
+                        <p class="name" data-ng-switch data-on="!!file.url">
+                            <span data-ng-switch-when="true" data-ng-switch data-on="!!file.thumbnailUrl">
+                                <a data-ng-switch-when="true" data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery>{{file.name}}</a>
+                                <a data-ng-switch-default data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}">{{file.name}}</a>
+                            </span>
+                            <span data-ng-switch-default>{{file.name}}</span>
+                        </p>
+                        <strong data-ng-show="file.error" class="error text-danger">{{file.error}}</strong>
+                    </td>
+                    <td>
+                        <p class="size">{{file.size | formatFileSize}}</p>
+                        <div class="progress progress-striped active fade" data-ng-class="{pending: 'in'}[file.$state()]" data-file-upload-progress="file.$progress()">
+                            <div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary start" data-ng-click="file.$submit()" data-ng-hide="!file.$submit || options.autoUpload" data-ng-disabled="file.$state() == 'pending' || file.$state() == 'rejected'">
+                            <i class="Hui-iconfont">&#xe642;</i>
+                            <span>上传</span>
+                        </button>
+                        <button type="button" class="btn cancel" data-ng-click="file.$cancel()" data-ng-hide="!file.$cancel" >
+                            <i class="Hui-iconfont">&#xe6dd;</i>
+                            <span>取消</span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
         </form>
     </div>
     </div>
@@ -89,6 +120,7 @@
     <script type="text/javascript" src="static/js/module.js"></script>
     <script type="text/javascript" src="static/js/simditor.js"></script>
     <script src="static/js/angular.min.js"></script>
+    <script src="static/js/jquery.ui.widget.js"></script>
     <script src="static/js/load-image.all.min.js"></script>
     <script src="static/js/canvas-to-blob.min.js"></script>
     <script src="static/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -101,30 +133,28 @@
     <script src="static/js/jquery.fileupload-video.js"></script>
     <script src="static/js/jquery.fileupload-validate.js"></script>
     <script src="static/js/jquery.fileupload-angular.js"></script>
-    <script src="static/js/app.js"></script>
-    <script type="text/javascript" src="lib/layer/2.1/layer.js"></script>
-    <script type="text/javascript" src="lib/icheck/jquery.icheck.min.js"></script>
-    <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"></script>
-    <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
-    <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.min.js"></script>
-    <script type="text/javascript" src="static/h-ui/js/H-ui.js"></script>
-    <script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="lib/layer/2.1/layer.js"></script> 
+    <script type="text/javascript" src="lib/icheck/jquery.icheck.min.js"></script> 
+    <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"></script> 
+    <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+    <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.min.js"></script> 
+    <script type="text/javascript" src="static/h-ui/js/H-ui.js"></script> 
+    <script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> 
     <script type="text/javascript" src="static/h-ui.admin/js/comment.js"></script>
     <script type="text/javascript" src="static/js/config.js"></script>
     <!--/_footer /作为公共模版分离出去-->
     <!--请在下方写此页面业务相关的脚本-->
     <script type="text/javascript" src="lib/webuploader/0.1.5/webuploader.min.js"></script>
     <script type="text/javascript">
+    var pathArr = ['http://fuwalasource.oss-cn-shanghai.aliyuncs.com/video/QQ%E8%A7%86%E9%A2%9120161216164529.mp4']
     //文本编辑
     var editor = new Simditor({
         textarea: $('.editor'),
         toolbarFloat: false
     });
 
-    function doSubmit(obj) {
-        obj.action = "http://"+config.api.host+":"+config.api.port+"/api/source/upload";
-        obj.submit()
-        return true;
+    function layer_close() {
+        window.parent.location.reload();
     }
 
     function video_save() {
@@ -136,30 +166,31 @@
             type: 2
         }
         if (!data.name) {
-            alert("请填写视频名称（即标题）");
+            layer.msg("请填写视频名称（即标题）");
             return;
         }
         if (!data.pathstr) {
-            alert("请上传视频");
+            layer.msg("请上传视频");
             return;
         }
 
         $.ajax({
-             type: "POST",
-             url: "http://"+config.api.host+":"+config.api.port+"/api/source/save",
-             data: data,
-             dataType: "json",
-             async: true,
-             success: function(result) {
-                if(result.errcode == 0) {
+            type: "POST",
+            url: "http://" + config.api.host + ":" + config.api.port + "/api/source/save",
+            data: data,
+            dataType: "json",
+            async: true,
+            success: function(result) {
+                if (result.errcode == 0) {
                     window.parent.location.reload();
                 } else {
                     alert(result.errmsg);
                 }
-             }
-         })
+            }
+        })
     }
     </script>
+    <script src="static/js/app.js"></script>
 </body>
 
 </html>
