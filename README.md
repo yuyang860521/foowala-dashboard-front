@@ -1,0 +1,1 @@
+# foowala-pos-service

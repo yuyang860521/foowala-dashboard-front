@@ -1,0 +1,15 @@
+{
+	"tags": {
+		"allowUnknownTags": true,
+		"dictionaries": ["jsdoc", "closure"]
+	},
+	"source": {
+		"include": ["./app/routes", "./app/services"],
+		"includePattern": ".+\\.js$"
+	},
+	"plugins": [],
+	"templates": {
+		"cleverLinks": false,
+		"monospaceLinks": false
+	}
+}
