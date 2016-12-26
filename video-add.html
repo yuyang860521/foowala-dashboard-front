@@ -53,18 +53,14 @@
             <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
             <div class="row fileupload-buttonbar">
                 <div style="margin:20px 150px">
-                    <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
-                    <i class="Hui-iconfont">&#xe604;</i>
-                    <span>添加视频</span>
-                    <input type="file" name="files[]" multiple ng-disabled="disabled">
-                    </span>
-                    <button type="button" class="btn btn-primary start" onclick="video_save()">
-                        <i class="Hui-iconfont">&#xe642;</i>
-                        <span>保存</span>
+                    <input type="file" id="videoadd" name="files[]" multiple ng-disabled="disabled" style="display: none;">
+                    <button type="button" class="btn btn-success radius" onClick="before_add();">
+                        <i class="Hui-iconfont">&#xe6dd;</i>
+                        <span>添加视频</span>
                     </button>
                     <button type="button" class="btn btn-default radius" onClick="layer_close();">
                         <i class="Hui-iconfont">&#xe6dd;</i>
-                        <span>取消</span>
+                        <span>返回</span>
                     </button>
                     <span class="fileupload-process"></span>
                 </div>
@@ -142,11 +138,11 @@
     <script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> 
     <script type="text/javascript" src="static/h-ui.admin/js/comment.js"></script>
     <script type="text/javascript" src="static/js/config.js"></script>
+    <script src="static/js/app.js"></script>
     <!--/_footer /作为公共模版分离出去-->
     <!--请在下方写此页面业务相关的脚本-->
     <script type="text/javascript" src="lib/webuploader/0.1.5/webuploader.min.js"></script>
     <script type="text/javascript">
-    var pathArr = ['http://fuwalasource.oss-cn-shanghai.aliyuncs.com/video/QQ%E8%A7%86%E9%A2%9120161216164529.mp4']
     //文本编辑
     var editor = new Simditor({
         textarea: $('.editor'),
@@ -157,21 +153,23 @@
         window.parent.location.reload();
     }
 
-    function video_save() {
+    function before_add() {
+        var name = $("#name").val();
+        if (!name) {
+            layer.msg("请填写视频名称（即标题）");
+            return;
+        }
+
+        $("#videoadd").get(0).click();
+    }
+
+    function video_save(filepath) {
         var data = {
-            pathstr: $("#path").val(),
+            pathstr: filepath,
             name: $("#name").val(),
             column: 1,
             desc: $("#desc").val(),
             type: 2
-        }
-        if (!data.name) {
-            layer.msg("请填写视频名称（即标题）");
-            return;
-        }
-        if (!data.pathstr) {
-            layer.msg("请上传视频");
-            return;
         }
 
         $.ajax({
@@ -182,15 +180,14 @@
             async: true,
             success: function(result) {
                 if (result.errcode == 0) {
-                    window.parent.location.reload();
+                    layer.msg("视频上传成功");
                 } else {
-                    alert(result.errmsg);
+                    layer.msg(result.errmsg);
                 }
             }
         })
     }
     </script>
-    <script src="static/js/app.js"></script>
 </body>
 
 </html>
