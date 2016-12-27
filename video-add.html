@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <style type="text/css">
-	button.radius{background-color:#e6e6e6;}
+	.btnBack .radius{background-color:#e6e6e6;}
 </style>
 <head>
     <meta charset="utf-8">
@@ -58,17 +58,11 @@
                         <i class="Hui-iconfont">&#xe6dd;</i>
                         <span>添加视频</span>
                     </button>
-                    <button type="button" class="btn btn-default radius" onClick="layer_close();">
+                    <button type="button btnBack" class="btn btn-default radius" onClick="layer_close();">
                         <i class="Hui-iconfont">&#xe6dd;</i>
                         <span>返回</span>
                     </button>
                     <span class="fileupload-process"></span>
-                </div>
-                <div class="col-lg-5 fade" data-ng-class="{in: active()}">
-                    <div class="progress progress-striped active" data-file-upload-progress="progress()">
-                        <div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div>
-                    </div>
-                    <div class="progress-extended">&nbsp;</div>
                 </div>
             </div>
             <table class="table table-striped files ng-cloak">
@@ -180,7 +174,9 @@
             async: true,
             success: function(result) {
                 if (result.errcode == 0) {
-                    layer.msg("视频上传成功");
+                    layer.msg("视频上传成功！请点击返回");
+                    $('button.start').css('display','none');
+                    $('button.cancel').css('display','none');
                 } else {
                     layer.msg(result.errmsg);
                 }
