@@ -71,10 +71,10 @@ const getStaffByOpenidLogin = (req, reply) => {
                     store_id: store_id,
                     staff_id: staff_id,
                     open_id: open_id
-                  },
-                  token = JWT.sign(jwt_token, secret, {
+                },
+                token = JWT.sign(jwt_token, secret, {
                     expiresIn: '720h'
-                  }); // synchronous
+                }); // synchronous
             backData.isAdmin = result.isAdmin;
             backData.token = token;
             backData.nickname = result.nickname;
@@ -84,7 +84,7 @@ const getStaffByOpenidLogin = (req, reply) => {
             backData.store = result;
             reply(msg.success("get openids success", backData));
             const status = 0;
-            return _report.insertBack({store_id, status, format_time})
+            return _report.insertBack({ store_id, status, format_time })
         })
         .then(report => {
             const report_id = report._id;
@@ -158,10 +158,10 @@ const deleteStaffById = (req, reply) => {
         msg = new message(),
         store_id = credentials.store_id,
         staff_id = req.payload.staff_id;
-    _staff.delete(staff_id, (bo)=>{
+    _staff.delete(staff_id, (bo) => {
         if (bo) {
             reply(msg.success('delete staff success'))
-        }else{
+        } else {
             reply(msg.unsuccess('delete staff fail'))
         }
     })
@@ -174,13 +174,73 @@ const getStaffsWorking = (req, reply) => {
         store_id = credentials.store_id,
         staff_id = req.payload.staff_id;
     _work.getStaffsWorking(store_id, staff_id)
-         .then(staffs => {
+        .then(staffs => {
             const count = staffs.length;
             // reply()
-         })
-         .catch(err => {
+        })
+        .catch(err => {
 
-         })
+        })
+}
+
+/* 
+    设置用户名，密码 PUT
+    url: /staffs/setNamePassword
+    params:
+        username 用户名
+        password 密码
+
+    return JSON
+*/
+const setNamePassword = (req, reply) => {
+    const credentials = req.auth.credentials,
+        msg = new message(),
+        staff_id = credentials.staff_id,
+        username = req.payload.username,
+        password = req.payload.password;
+    _staff.setNamePassword(staff_id, username, password)
+        .then(results => {
+            if (results.msg == 'exists') {
+                reply(msg.unsuccess2('100001'));
+            } else if(results.msg == 'once') {
+                reply(msg.unsuccess2('100002'));
+            } else {
+                reply(msg.success('success'));
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            reply(msg.unsuccess(err.message, null));
+        })
+}
+
+/* 
+    修改密码 PUT
+    url: /staffs/editorPassword
+    params:
+        password 用户现密码
+        newpassword 用户新密码
+
+    return JSON
+*/
+const editorPassword = (req, reply) => {
+    const credentials = req.auth.credentials,
+        msg = new message(),
+        staff_id = credentials.staff_id,
+        password = req.payload.password,
+        newpassword = req.payload.newpassword;
+    _staff.editorPassword(staff_id, password, newpassword)
+        .then(results => {
+            if(results.msg == 'uncorrect') {
+                reply(msg.unsuccess2('100003'));
+            } else {
+                reply(msg.success('success'));
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            reply(msg.unsuccess(err.message, null));
+        })
 }
 
 
@@ -232,24 +292,38 @@ module.exports = [{
     method: "GET",
     path: "/staff/logincheck",
     config: {
-         auth:false,
-        handler: function (request, reply) {
+        auth: false,
+        handler: function(request, reply) {
             var connection = global.connection;
-            connection.send(JSON.stringify({isRegister: 0}));
+            connection.send(JSON.stringify({ isRegister: 0 }));
         }
-      }
-},{
+    }
+}, {
     method: 'delete',
     path: '/staff',
     config: {
         handler: deleteStaffById,
         description: '<p>通过id delete员工</p>'
     }
-},{
+}, {
     method: 'GET',
     path: '/staffs/working',
     config: {
         handler: getStaffsWorking,
         description: '<p>获取所有还在上班的员工 除去正在查询的人</p>'
+    }
+}, {
+    method: 'PUT',
+    path: '/staffs/setNamePassword',
+    config: {
+        handler: setNamePassword,
+        description: '<p>设置用户名，密码</p>'
+    }
+}, {
+    method: 'PUT',
+    path: '/staffs/editorPassword',
+    config: {
+        handler: editorPassword,
+        description: '<p>修改密码</p>'
     }
 }];

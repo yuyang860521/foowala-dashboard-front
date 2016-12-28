@@ -24,6 +24,7 @@ var messageModel = function() {
     count    : 0,
     msg      : '错误操作！',
     success  : (msg, data) => {
+      console.log(m.getErrMsg("SUCCESS"));
       this.status    = 1;
       this.errorcode = 200;
       this.msg       = msg;
@@ -42,8 +43,54 @@ var messageModel = function() {
       else this.errorcode = 500;
       this.msg       = msg;
       return this;
+    },
+    unsuccess2: (sign) => {
+      return m.getErrMsg(sign)
     }
   };
 };
+
+var m = (function() {
+    let conf = {
+        msg: {
+            MSG_SUCCESS: {
+                status: 1,
+                code: 0,
+                errormsg: '操作成功'
+            },
+            MSG_ERROR: {
+                status: 0,
+                code: -1,
+                errmsg: '操作失败'
+            },
+            MSG_100001: {
+                status: 0,
+                code: 100001,
+                errmsg: '该用户名已存在'
+            },
+            MSG_100002: {
+                status: 0,
+                code: 100002,
+                errmsg: '用户名只可以修改一次'
+            },
+            MSG_100003: {
+                status: 0,
+                code: 100003,
+                errmsg: '初始密码输入错误'
+            },
+            MSG_ERROR: {
+                status: 0,
+                code: -1,
+                errmsg: '操作失败'
+            }
+        }
+    }
+
+    return {
+        getErrMsg: function(sign) {
+            return conf['msg']['MSG_'+sign] ? conf['msg']['MSG_'+sign] : null
+        }
+    }
+})()
 
 module.exports = messageModel;

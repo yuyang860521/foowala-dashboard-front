@@ -10,7 +10,10 @@ var async = require('async'),
     _register_info = require('./register_info.service'),
     request = require('request'),
     _token = require('../helpers/token'),
-    config = require('../../config/config');
+    config = require('../../config/config'),
+    proms = require('bluebird'),
+    co = require('co'),
+    ObjectId = require('mongoose/lib/types/objectid');
 var WechatAPI = require('wechat-api'),
     fs = require('fs');
 var exports = {
@@ -216,6 +219,55 @@ var exports = {
             })
         })
     },
+
+    setNamePassword(staff_id, username, password) {
+        return new Promise((resolve, reject) => {
+            co(function* () {
+                let userobj = yield staff_mongo.findOne({_id:ObjectId(staff_id)});//根据_id查找用户信息
+                userobj = userobj.toObject();
+                if(!userobj.name) {
+                    let count = yield staff_mongo.count({_id:{$ne:ObjectId(staff_id)},name:username});//统计有多少条记录的nickname与用户设置的名相同(用户自己除外)
+                    if(count == 0) {
+                        let pwd = yield encryption.cipherpromise(password, userobj.key);//对用户设置的密码进行加密
+                        yield staff_mongo.findByIdAndUpdate(staff_id, {name:username, password:pwd});//更新用户名和密码
+                        
+                    } else {
+                        resolve({msg:'exists'});//设置的用户名已存在
+                    }
+                } else {
+                    resolve({msg:'once'});//用户名只能设置一次
+                }
+
+            }).then(function() {
+                resolve({msg:'success'})
+            }).catch(function(e) {
+                console.log(e);
+                reject('set name and password fail');
+            })
+        })
+    },
+
+    editorPassword(staff_id, password, newpassword) {
+        return new Promise((resolve, reject) => {
+            co(function* () {
+                let userobj = yield staff_mongo.findOne({_id:ObjectId(staff_id)});//根据_id查询用户信息
+                userobj = userobj.toObject();
+                let currpwd = yield encryption.decipherpromise(userobj.password, userobj.key); //对数据库用户密码进行解密
+                if(password == currpwd) { //比较用户输入原始密码和数据库真正原始密码是否相等，如果相等就更新 新密码
+                    let pwd = yield encryption.cipherpromise(newpassword, userobj.key); //对新密码进行加密
+                    yield staff_mongo.findByIdAndUpdate(staff_id, {password:pwd});
+                } else {
+                    resolve({msg:'uncorrect'});
+                }
+            }).then(function() {
+                resolve({msg:'success'})
+            }).catch(function(e) {
+                console.log(e);
+                reject('editor password fail');
+            })
+        })
+    }
+
 };
 
 module.exports = exports;
