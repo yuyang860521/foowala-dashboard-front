@@ -223,19 +223,16 @@ var exports = {
     setNamePassword(staff_id, username, password) {
         return new Promise((resolve, reject) => {
             co(function* () {
-                let userobj = yield staff_mongo.findOne({_id:ObjectId(staff_id)});//根据_id查找用户信息
-                userobj = userobj.toObject();
-                if(!userobj.name) {
-                    let count = yield staff_mongo.count({_id:{$ne:ObjectId(staff_id)},name:username});//统计有多少条记录的nickname与用户设置的名相同(用户自己除外)
-                    if(count == 0) {
-                        let pwd = yield encryption.cipherpromise(password, userobj.key);//对用户设置的密码进行加密
-                        yield staff_mongo.findByIdAndUpdate(staff_id, {name:username, password:pwd});//更新用户名和密码
-                        
-                    } else {
-                        resolve({msg:'exists'});//设置的用户名已存在
-                    }
+                let count = yield staff_mongo.count({_id:{$ne:ObjectId(staff_id)},name:username});//统计有多少条记录的nickname与用户设置的名相同(用户自己除外)
+                if(count == 0) {
+                    let userobj = yield staff_mongo.findOne({_id:ObjectId(staff_id)});//根据_id查找用户信息
+                    userobj = userobj.toObject();
+
+                    let pwd = yield encryption.cipherpromise(password, userobj.key);//对用户设置的密码进行加密
+                    yield staff_mongo.findByIdAndUpdate(staff_id, {name:username, password:pwd});//更新用户名和密码
+                    
                 } else {
-                    resolve({msg:'once'});//用户名只能设置一次
+                    resolve({msg:'exists'});//设置的用户名已存在
                 }
 
             }).then(function() {

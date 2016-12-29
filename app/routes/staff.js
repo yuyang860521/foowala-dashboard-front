@@ -202,8 +202,6 @@ const setNamePassword = (req, reply) => {
         .then(results => {
             if (results.msg == 'exists') {
                 reply(msg.unsuccess2('100001'));
-            } else if(results.msg == 'once') {
-                reply(msg.unsuccess2('100002'));
             } else {
                 reply(msg.success('success'));
             }
@@ -232,7 +230,7 @@ const editorPassword = (req, reply) => {
     _staff.editorPassword(staff_id, password, newpassword)
         .then(results => {
             if(results.msg == 'uncorrect') {
-                reply(msg.unsuccess2('100003'));
+                reply(msg.unsuccess2('100002'));
             } else {
                 reply(msg.success('success'));
             }

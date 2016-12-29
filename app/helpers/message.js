@@ -71,11 +71,6 @@ var m = (function() {
             MSG_100002: {
                 status: 0,
                 code: 100002,
-                errmsg: '用户名只可以修改一次'
-            },
-            MSG_100003: {
-                status: 0,
-                code: 100003,
                 errmsg: '初始密码输入错误'
             },
             MSG_ERROR: {
