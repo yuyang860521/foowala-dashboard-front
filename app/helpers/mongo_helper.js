@@ -60,6 +60,24 @@ var mongo_funcs = function (mongo_name) {
         })
     },
 
+    this.insertBackCommon = (data, callback) => {
+        this.findOne(data)
+            .then(result => {
+                if (result) {
+                    callback(null, result);
+                } else {
+                    callback(null, data);
+                }
+            })
+            .then(doc => {
+                callback(null, doc);
+            })
+            .catch(err => {
+                console.log(err)
+                callback(err);
+            })
+    },
+
     this.insert = (data) => {
         return new Promise((resolve, reject) => {
             this.findOne(data)

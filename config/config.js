@@ -26,7 +26,7 @@ const path = require('path'),
 				accesstoken:'uachTM8WOZlIpvZrg8LbMmxl2f0VSm1g_UYfABHKQANOFD6RfmDSXLcO0iIlGXq6C4bAG71vBtoyqG0k1aZyAFiSdk_KAbtPGUV1sRLTWz3-7SdkMl86nLGle0Bp3fUkQJTeAEALEO'
 			},
 			qr:{
-				token:'http://localhost:3000/accesstoken',
+				token:'http://10.111.110.67:3000/accesstoken',
 				qrurl: 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=',
 				ticketurl: 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=',
 				userurl: 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='

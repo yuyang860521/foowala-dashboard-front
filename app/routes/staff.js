@@ -14,7 +14,8 @@ const message = require('../helpers/message'),
     report_mongo = mongoose.model('report'),
     mongo_helper = require('../helpers/mongo_helper'),
     _report = new mongo_helper(report_mongo),
-    _time = require('../helpers/time_help');
+    _time = require('../helpers/time_help'),
+    EventProxy = require('eventproxy');
 
 const JWT = require('jsonwebtoken'); // used to sign our content
 const secret = 'foowalapos';
@@ -78,6 +79,7 @@ const getStaffByOpenidLogin = (req, reply) => {
             backData.isAdmin = result.isAdmin;
             backData.token = token;
             backData.nickname = result.nickname;
+            backData.name = result.name;
             return _store.getStoreByIdPromise(store_id);
         })
         .then(result => {
@@ -184,8 +186,65 @@ const getStaffsWorking = (req, reply) => {
 }
 
 /* 
+    用户登录-》账号密码方式 POST
+    url: /staff/accountlogin
+    params:
+        username 用户名
+        password 密码
+
+    return JSON
+*/
+const getStaffByIdLogin = (req, reply) => {
+    const credentials = req.auth.credentials,
+        msg = new message(),
+        staff_id = credentials.staff_id,
+        username = req.payload.username,
+        password = req.payload.password;
+
+    let ep = new EventProxy()
+    _staff.getStaffByIdCommon(staff_id, ep.doneLater("staffinfo"));
+
+    ep.once("staffinfo", function(staffinfo) {
+        if(staffinfo) {
+            let store_id = staffinfo.store_id,
+                name = staffinfo.name,
+                nickname = staffinfo.nickname,
+                job_number = staffinfo.job_number,
+                open_id = staffinfo.open_id,
+                is_admin = staffinfo.is_admin,
+                backData = {};
+            const format_time = _time.getTimeDetail(),
+                    jwt_token = { store_id: store_id, staff_id: staff_id, open_id: open_id },
+                    status = 0;
+
+            backData.isAdmin = is_admin;
+            backData.token = JWT.sign(jwt_token, secret, {expiresIn: '720h'});
+            backData.nickname = nickname;
+            backData.name = name;
+
+            _store.getStoreByIdCommon(store_id, ep.done("storeinfo"));//获取门店信息
+            _report.insertBackCommon({ store_id, status, format_time }, ep.done("reportinfo"));//查询report信息
+
+            ep.all("storeinfo", "reportinfo", function(storeinfo, reportinfo) {
+                backData.store = storeinfo;
+                let report_id = reportinfo._id;
+                _work.intoWork({ staff_id, nickname, job_number, store_id, report_id }, ep.done("workinfo"));//新增员工日结账
+            
+                reply(msg.success("get userinfo success", backData));
+            });
+        } else {
+            reply(msg.unsuccess2("100003"));
+        }
+    })
+
+    ep.fail(function (err) {
+        reply(msg.unsuccess("get userinfo fail"));
+    });
+}
+
+/* 
     设置用户名，密码 PUT
-    url: /staffs/setNamePassword
+    url: /staff/setnamepassword
     params:
         username 用户名
         password 密码
@@ -214,7 +273,7 @@ const setNamePassword = (req, reply) => {
 
 /* 
     修改密码 PUT
-    url: /staffs/editorPassword
+    url: /staff/modifypwd
     params:
         password 用户现密码
         newpassword 用户新密码
@@ -312,16 +371,23 @@ module.exports = [{
     }
 }, {
     method: 'PUT',
-    path: '/staffs/setNamePassword',
+    path: '/staff/setnamepassword',
     config: {
         handler: setNamePassword,
         description: '<p>设置用户名，密码</p>'
     }
 }, {
     method: 'PUT',
-    path: '/staffs/editorPassword',
+    path: '/staff/modifypwd',
     config: {
         handler: editorPassword,
         description: '<p>修改密码</p>'
+    }
+}, {
+    method: 'POST',
+    path: '/staff/accountlogin',
+    config: {
+        handler: getStaffByIdLogin,
+        description: '<p>用户登录-》账号密码方式</p>'
     }
 }];

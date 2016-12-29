@@ -100,6 +100,12 @@ var exports = {
     });
   },
 
+  getStoreByIdCommon(id, callback) {
+    store_mongo.findById(id, store => {
+      callback(null, store);
+    });
+  },
+
   getStoreByIdPromise(id) {
     return new Promise((resolve, reject)=>{
       store_mongo.findById(id, store => {

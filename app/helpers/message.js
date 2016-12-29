@@ -73,6 +73,11 @@ var m = (function() {
                 code: 100002,
                 errmsg: '初始密码输入错误'
             },
+            MSG_100003: {
+                status: 0,
+                code: 100003,
+                errmsg: '用户名或密码输入错误'
+            },
             MSG_ERROR: {
                 status: 0,
                 code: -1,

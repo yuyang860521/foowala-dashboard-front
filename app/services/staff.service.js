@@ -161,6 +161,13 @@ var exports = {
             callback(staff);
         });
     },
+
+    getStaffByIdCommon(id, callback) {
+        staff_mongo.findById(id, (staff) => {
+            callback(null, staff);
+        });
+    },
+
     getStaffByIdPromise(id) {
         return new Promise((resolve, reject) => {
             staff_mongo.findById(id, (staff) => {
