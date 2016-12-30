@@ -256,7 +256,6 @@ const setNamePassword = (req, reply) => {
         staff_id = credentials.staff_id,
         username = req.payload.username,
         password = req.payload.password;
-        console.log("controller:  ",req.payload.username, req.payload.password)
     _staff.setNamePassword(staff_id, username, password)
         .then(results => {
             if (results.msg == 'exists') {
