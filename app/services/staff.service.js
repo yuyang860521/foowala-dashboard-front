@@ -162,10 +162,27 @@ var exports = {
         });
     },
 
-    getStaffByIdCommon(id, callback) {
-        staff_mongo.findById(id, (staff) => {
-            callback(null, staff);
-        });
+    getStaffByAccount(username, password, callback) {
+        co(function* () {
+            let userobj = yield staff_mongo.findOne({name:username});
+            if(userobj) {
+                userobj = userobj.toObject();
+                let pwd = yield encryption.cipherpromise(password, userobj.key);//对用户设置的密码进行加密
+                if(userobj.password == pwd) {
+                    return callback(null, "success");
+                } else {
+                    return callback(null, null);
+                }
+            } else {
+                callback(null, null);
+            }
+
+        }).then(function() {
+            callback(null, "success")
+        }).catch(function(e) {
+            console.log(e);
+            callback('get user message fail');
+        })
     },
 
     getStaffByIdPromise(id) {

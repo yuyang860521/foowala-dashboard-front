@@ -195,18 +195,17 @@ const getStaffsWorking = (req, reply) => {
     return JSON
 */
 const getStaffByIdLogin = (req, reply) => {
-    const credentials = req.auth.credentials,
-        msg = new message(),
-        staff_id = credentials.staff_id,
+    const msg = new message(),
         username = req.payload.username,
         password = req.payload.password;
 
     let ep = new EventProxy()
-    _staff.getStaffByIdCommon(staff_id, ep.doneLater("staffinfo"));
+    _staff.getStaffByAccount(username, password, ep.doneLater("staffinfo"));
 
     ep.once("staffinfo", function(staffinfo) {
         if(staffinfo) {
-            let store_id = staffinfo.store_id,
+            let staff_id = staffinfo._id,
+                store_id = staffinfo.store_id,
                 name = staffinfo.name,
                 nickname = staffinfo.nickname,
                 job_number = staffinfo.job_number,
@@ -252,11 +251,12 @@ const getStaffByIdLogin = (req, reply) => {
     return JSON
 */
 const setNamePassword = (req, reply) => {
-    const credentials = req.auth.credentials,
+    let credentials = req.auth.credentials,
         msg = new message(),
         staff_id = credentials.staff_id,
         username = req.payload.username,
         password = req.payload.password;
+        console.log("controller:  ",req.payload.username, req.payload.password)
     _staff.setNamePassword(staff_id, username, password)
         .then(results => {
             if (results.msg == 'exists') {
@@ -387,6 +387,7 @@ module.exports = [{
     method: 'POST',
     path: '/staff/accountlogin',
     config: {
+        auth: false,
         handler: getStaffByIdLogin,
         description: '<p>用户登录-》账号密码方式</p>'
     }

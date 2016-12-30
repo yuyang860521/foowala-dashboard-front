@@ -28,5 +28,6 @@ var db,
 
 mongoose.Promise = require('bluebird');
 mongoose.connect(mongodb_cfg.db, connectOpen);
+mongoose.set('debug', true);
 
 module.exports = db;

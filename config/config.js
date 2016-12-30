@@ -15,7 +15,7 @@ const path = require('path'),
 			root: rootPath,
 			mongo: {
 				// db: 'mongodb://10.111.110.144:27017/foowalapos',
-				db: 'mongodb://localhost:27017/foowalapos'
+				db: 'mongodb://10.111.110.67:27017/foowalapos'
 			},
 			wechat_api:{
 				custom:'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token='
@@ -26,7 +26,7 @@ const path = require('path'),
 				accesstoken:'uachTM8WOZlIpvZrg8LbMmxl2f0VSm1g_UYfABHKQANOFD6RfmDSXLcO0iIlGXq6C4bAG71vBtoyqG0k1aZyAFiSdk_KAbtPGUV1sRLTWz3-7SdkMl86nLGle0Bp3fUkQJTeAEALEO'
 			},
 			qr:{
-				token:'http://10.111.110.67:3000/accesstoken',
+				token:'http://wechatme.leanapp.cn/db/token',
 				qrurl: 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=',
 				ticketurl: 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=',
 				userurl: 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='
@@ -48,7 +48,7 @@ const path = require('path'),
 				db: 'mongodb://ec2-54-222-232-3.cn-north-1.compute.amazonaws.com.cn:27017,ec2-54-222-167-240.cn-north-1.compute.amazonaws.com.cn:27017/foowalapos_test'
 			},
 			qr:{
-				token:'http://www.foowala.com/dashboard/token',
+				token:'http://wechatme.leanapp.cn/db/token',
 				qrurl: 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=',
 				ticketurl: 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=',
 				userurl: 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='
