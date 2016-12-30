@@ -169,7 +169,7 @@ var exports = {
                 userobj = userobj.toObject();
                 let pwd = yield encryption.cipherpromise(password, userobj.key);//对用户设置的密码进行加密
                 if(userobj.password == pwd) {
-                    return callback(null, "success");
+                    return callback(null, userobj);
                 } else {
                     return callback(null, null);
                 }
@@ -178,7 +178,6 @@ var exports = {
             }
 
         }).then(function() {
-            callback(null, "success")
         }).catch(function(e) {
             console.log(e);
             callback('get user message fail');
