@@ -14,8 +14,8 @@ const path = require('path'),
 			},
 			root: rootPath,
 			mongo: {
-				// db: 'mongodb://10.111.110.144:27017/foowalapos',
-				db: 'mongodb://10.111.110.67:27017/foowalapos'
+				db: 'mongodb://127.0.0.1:27017/foowalapos',
+				// db: 'mongodb://10.111.110.67:27017/foowalapos'
 			},
 			wechat_api:{
 				custom:'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token='

@@ -204,6 +204,7 @@ const getStaffByIdLogin = (req, reply) => {
 
     ep.once("staffinfo", function(staffinfo) {
         if(staffinfo) {
+            staffinfo = staffinfo.toObject()
             let staff_id = staffinfo._id,
                 store_id = staffinfo.store_id,
                 name = staffinfo.name,
@@ -247,6 +248,8 @@ const getStaffByIdLogin = (req, reply) => {
     params:
         username 用户名
         password 密码
+
+    TODO: 设置成功发送邮件
 
     return JSON
 */
